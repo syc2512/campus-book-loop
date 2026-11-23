@@ -1,0 +1,31 @@
+{
+  "status": "synthetic-only",
+  "notice": "Do not use these values as evidence of real-market accuracy.",
+  "dataset": {
+    "name": "deterministic synthetic textbook pricing data",
+    "samples": 3600,
+    "train_samples": 2866,
+    "validation_samples": 734,
+    "split_strategy": "time",
+    "train_date_range": [
+      "2025-01-01",
+      "2026-06-12"
+    ],
+    "validation_date_range": [
+      "2026-06-13",
+      "2026-10-23"
+    ],
+    "random_seed": 20261122
+  },
+  "rule_baseline": {
+    "mae": 1.357,
+    "mape": 0.0394,
+    "r2": 0.9871
+  },
+  "ridge_model": {
+    "mae": 1.8873,
+    "mape": 0.0558,
+    "r2": 0.9766
+  },
+  "model_version": "synthetic-ridge-v2"
+}

@@ -1,0 +1,36 @@
+{
+  "version": "synthetic-ridge-v2",
+  "data_source": "synthetic",
+  "feature_order": [
+    "intercept",
+    "condition_norm",
+    "condition_norm_squared",
+    "category_factor",
+    "demand_factor",
+    "has_notes",
+    "edition_current",
+    "log_new_price"
+  ],
+  "weights": [
+    -1.07053608,
+    0.90091373,
+    -0.21637863,
+    0.48137404,
+    0.47961907,
+    -0.06497344,
+    0.15949094,
+    -0.03607117
+  ],
+  "training_rows": 2866,
+  "validation_rows": 734,
+  "split_strategy": "time",
+  "train_date_range": [
+    "2025-01-01",
+    "2026-06-12"
+  ],
+  "validation_date_range": [
+    "2026-06-13",
+    "2026-10-23"
+  ],
+  "random_seed": 20261122
+}

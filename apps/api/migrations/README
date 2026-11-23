@@ -1,0 +1,7 @@
+Single-database Alembic migration environment for Campus Book Loop.
+
+Run migrations from apps/api:
+
+    alembic upgrade head
+
+The database URL comes from DATABASE_URL (see app/core/config.py).

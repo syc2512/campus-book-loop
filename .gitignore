@@ -1,0 +1,64 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+
+# JavaScript / TypeScript
+node_modules/
+.next/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+apps/api/.e2e-uploads/
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+
+# Runtime data
+uploads/
+data/private/
+*.sqlite
+*.sqlite3
+*.db
+celerybeat-schedule
+
+# Model and experiment artifacts
+models/
+mlruns/
+wandb/
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.joblib
+*.pkl
+
+# Logs and temporary output
+*.log
+tmp/
+temp/
+artifacts/

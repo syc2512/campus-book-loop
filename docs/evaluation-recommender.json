@@ -1,0 +1,30 @@
+{
+  "status": "synthetic-only",
+  "notice": "Interactions are generated from course affinity; do not treat these values as real-world recommendation quality.",
+  "dataset": {
+    "name": "deterministic synthetic course-affinity interactions",
+    "users": 300,
+    "catalog_items": 40,
+    "random_seed": 20261122,
+    "train_interactions": 2368,
+    "held_out_items": 300,
+    "split_strategy": "per-user leave-last-out (chronological interaction order)"
+  },
+  "metrics": {
+    "popularity": {
+      "recall_at_10": 0.3767,
+      "ndcg_at_10": 0.1757,
+      "coverage": 0.475
+    },
+    "content": {
+      "recall_at_10": 0.52,
+      "ndcg_at_10": 0.2494,
+      "coverage": 1.0
+    },
+    "hybrid": {
+      "recall_at_10": 0.5867,
+      "ndcg_at_10": 0.351,
+      "coverage": 1.0
+    }
+  }
+}

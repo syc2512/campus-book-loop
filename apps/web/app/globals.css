@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --ink: #173638;
+  --paper: #eef1e8;
+  --moss: #2f6558;
+  --marigold: #edbd45;
+  --brick: #bd4f35;
+  --chalk: #f9faf4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(23, 54, 56, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(rgba(23, 54, 56, 0.025) 1px, transparent 1px) 0 0 / 48px 48px,
+    var(--paper);
+  font-family: "Noto Sans SC", "Source Han Sans SC", Aptos, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  color: var(--chalk);
+  background: var(--moss);
+}
+
+:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-12;
+  }
+
+  .display-title {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+    letter-spacing: -0.045em;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold tracking-[0.16em] text-moss;
+  }
+
+  .primary-button {
+    @apply inline-flex min-h-11 items-center justify-center border-2 border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-chalk transition;
+    box-shadow: 4px 4px 0 var(--marigold);
+  }
+
+  .primary-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--marigold);
+  }
+
+  .secondary-button {
+    @apply inline-flex min-h-11 items-center justify-center border border-ink/30 bg-chalk/80 px-4 py-2.5 text-sm font-semibold text-ink transition;
+  }
+
+  .secondary-button:hover {
+    @apply border-ink bg-white;
+  }
+
+  .field {
+    @apply w-full border border-ink/25 bg-white/80 px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-fog/70;
+  }
+
+  .field:focus {
+    @apply border-moss;
+    box-shadow: 0 0 0 3px rgba(47, 101, 88, 0.12);
+  }
+
+  .paper-panel {
+    @apply border border-ink/20 bg-chalk/90;
+    box-shadow: 0 18px 50px rgba(23, 54, 56, 0.09);
+  }
+
+  .status-pill {
+    @apply inline-flex items-center border border-ink/20 bg-white/60 px-2.5 py-1 text-xs font-medium;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

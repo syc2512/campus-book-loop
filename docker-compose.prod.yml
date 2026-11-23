@@ -1,0 +1,102 @@
+# Production-oriented single-node deployment.
+#
+#   cp .env.prod.example .env.prod
+#   docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --build
+#
+# Caddy terminates HTTPS and routes /api, /media and API docs to FastAPI.
+# Listing images are stored in the `uploads_data` volume.
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-campus_book_loop}
+      POSTGRES_USER: ${POSTGRES_USER:-campus_book_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.prod}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-campus_book_app} -d ${POSTGRES_DB:-campus_book_loop}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-campus_book_app}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-campus_book_loop}
+      TOKEN_SECRET: ${TOKEN_SECRET:?set TOKEN_SECRET in .env.prod}
+      TOKEN_EXPIRE_MINUTES: ${TOKEN_EXPIRE_MINUTES:-240}
+      CORS_ORIGINS: ${PUBLIC_BASE_URL:?set PUBLIC_BASE_URL in .env.prod}
+      SEED_ON_STARTUP: ${SEED_ON_STARTUP:-true}
+      AUTO_CREATE_SCHEMA: "false"
+      UPLOAD_DIR: /app/uploads
+      MEDIA_URL_PREFIX: /media
+      MAX_IMAGE_BYTES: ${MAX_IMAGE_BYTES:-5242880}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    expose:
+      - "8000"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${PUBLIC_BASE_URL:?set PUBLIC_BASE_URL in .env.prod}/api/v1
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    depends_on:
+      api:
+        condition: service_healthy
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env.prod}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in .env.prod}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_started
+
+volumes:
+  postgres_data:
+  uploads_data:
+  caddy_data:
+  caddy_config:
